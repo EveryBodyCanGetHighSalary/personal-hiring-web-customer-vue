@@ -1,33 +1,102 @@
-import { Express, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
+import { Express, Request, Response, NextFunction } from 'express';
+import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
+import { readFileSync } from 'fs';
 import path from 'path';
-function generateJWT() {
-    const secretKey = fs
-        .readFileSync(path.resolve(__dirname, './secretKey.txt'))
-        .toString();
+const secretKey = readFileSync(
+    path.resolve(__dirname, './secretKey.txt'),
+).toString();
+
+/**
+ * token颁发
+ *
+ * @param {string} userName
+ * @param {string} email
+ * @param {RoleType} roleType
+ * @return {*}
+ */
+function generateJWT(userName: string, email: string, roleType: RoleType) {
     const token = jwt.sign(
         {
-            admin: true,
+            email,
+            userName,
+            role: roleType,
         },
         secretKey,
         {
-            expiresIn: 86400,
+            expiresIn: 300,
         },
     );
-    console.log(__dirname);
-    console.log('token=', token);
+
+    return token;
+}
+
+export function verification(
+    request: Request,
+    response: Response,
+    next: NextFunction,
+) {
+    if (request.originalUrl === '/auth') {
+        next();
+        return;
+    }
+    const token = request.headers.authorization;
+    if (token) {
+        try {
+            jwt.verify(token.split(' ')[1], secretKey);
+            next();
+        } catch (error: unknown) {
+            if (error instanceof TokenExpiredError) {
+                response.status(401).send({
+                    code: 401,
+                    message: '当前会话已过期，请重新登录',
+                });
+            } else if (error instanceof JsonWebTokenError) {
+                response.status(401).send({
+                    code: 401,
+                    message: '认证失败，请勿手动修改登录配置。即将重新登录',
+                });
+            }
+        }
+    } else {
+        response.status(400).send({
+            code: 400,
+            message: '您当前尚未登录，请登录后重试',
+        });
+    }
 }
 
 const authCallback = (request: Request, response: Response) => {
-    console.log('request.params', request.params);
-    response.send({
-        param: request.query,
-        body: request.body,
-        headers: request.headers,
-    });
+    if (request.headers.authorization) {
+        try {
+            const token = request.headers.authorization.split(' ')[1];
+            jwt.verify(token, secretKey);
+            response.send({
+                token,
+            });
+        } catch (error: unknown) {
+            response.status(401).send({
+                code: 401,
+                message: '当前身份认证已过期，请重新登录',
+            });
+        }
+    } else {
+        // console.log(request.body);
+        const { userName, password, email } = request.body;
+        if (email === 'admin@qq.com' && password === 'admin123') {
+            const token = generateJWT(userName, email, 'customer');
+            response.send({
+                token,
+            });
+        } else {
+            response.status(400).send({
+                code: 400,
+                message: '该用户不存在！',
+            });
+        }
+    }
 };
 
-const AuthController = (app: Express) => app.get('/auth', authCallback);
+const AuthController = (app: Express) => app.post('/auth', authCallback);
 
+type RoleType = 'customer' | 'company' | 'admin';
 export default AuthController;

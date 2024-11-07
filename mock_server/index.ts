@@ -1,15 +1,14 @@
 import express from 'express';
-import AuthController from './auth/auth';
+import AuthController, { verification } from './auth/auth';
 const app: express.Express = express();
 const port = 3001;
 
-app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('Hello World!');
-});
-
-app.get('/test', (req, res) => {
-    res.send('Hello World! test');
-});
+// 用于解析JSON格式的请求体
+app.use(express.json());
+app.use(verification);
+// app.get('/', (req: express.Request, res: express.Response) => {
+//     res.send('Hello World!');
+// });
 
 AuthController(app);
 

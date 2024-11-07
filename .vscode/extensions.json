@@ -1,17 +1,19 @@
 {
   "recommendations": [
-    "vue.vscode-typescript-vue-plugin",
-    "steoates.autoimport",
-    "oouo-diogo-perdigao.docthis",
-    "mhutchie.git-graph",
-    "oderwat.indent-rainbow",
-    "pkief.material-icon-theme",
-    "esbenp.prettier-vscode",
-    "wayou.vscode-todo-highlight",
-    "hollowtree.vue-snippets",
-    "streetsidesoftware.code-spell-checker",
-    "dbaeumer.vscode-eslint",
-    "antfu.vite",
-    "ionutvmi.path-autocomplete"
+      "eamodio.gitlens",
+      "PKief.material-icon-theme",
+      "steoates.autoimport",
+      "streetsidesoftware.code-spell-checker",
+      "oouo-diogo-perdigao.docthis",
+      "dbaeumer.vscode-eslint",
+      "mhutchie.git-graph",
+      "oderwat.indent-rainbow",
+      "ionutvmi.path-autocomplete",
+      "esbenp.prettier-vscode",
+      "wayou.vscode-todo-highlight",
+      "antfu.vite",
+      "Vue.volar",
+      "hollowtree.vue-snippets",
+      "febean.vue-format"
   ]
 }
