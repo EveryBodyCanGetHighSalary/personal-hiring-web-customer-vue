@@ -1,19 +1,18 @@
 {
-  "recommendations": [
-      "eamodio.gitlens",
-      "PKief.material-icon-theme",
-      "steoates.autoimport",
-      "streetsidesoftware.code-spell-checker",
-      "oouo-diogo-perdigao.docthis",
-      "dbaeumer.vscode-eslint",
-      "mhutchie.git-graph",
-      "oderwat.indent-rainbow",
-      "ionutvmi.path-autocomplete",
-      "esbenp.prettier-vscode",
-      "wayou.vscode-todo-highlight",
-      "antfu.vite",
-      "Vue.volar",
-      "hollowtree.vue-snippets",
-      "febean.vue-format"
-  ]
+    "recommendations": [
+        "eamodio.gitlens",
+        "PKief.material-icon-theme",
+        "steoates.autoimport",
+        "streetsidesoftware.code-spell-checker",
+        "oouo-diogo-perdigao.docthis",
+        "dbaeumer.vscode-eslint",
+        "mhutchie.git-graph",
+        "oderwat.indent-rainbow",
+        "ionutvmi.path-autocomplete",
+        "esbenp.prettier-vscode",
+        "wayou.vscode-todo-highlight",
+        "antfu.vite",
+        "Vue.volar",
+        "febean.vue-format"
+    ]
 }

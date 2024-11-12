@@ -2,6 +2,7 @@ import { Express, Request, Response, NextFunction } from 'express';
 import jwt, { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 import { readFileSync } from 'fs';
 import path from 'path';
+import { APIResponse } from '../api.types';
 const secretKey = readFileSync(
     path.resolve(__dirname, './secretKey.txt'),
 ).toString();
@@ -80,12 +81,19 @@ const authCallback = (request: Request, response: Response) => {
             });
         }
     } else {
-        // console.log(request.body);
-        const { userName, password, email } = request.body;
-        if (email === 'admin@qq.com' && password === 'admin123') {
+        const { password, email } = request.body;
+        if (email === 'customer@qq.com' && password === 'customer123') {
+            const userName = 'customer1';
             const token = generateJWT(userName, email, 'customer');
-            response.send({
-                token,
+            response.send(<
+                APIResponse<{
+                    token: string;
+                    userName: string;
+                    roleType: RoleType;
+                }>
+            >{
+                data: { token, userName, roleType: 'customer' },
+                code: 200,
             });
         } else {
             response.status(400).send({

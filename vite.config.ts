@@ -9,13 +9,20 @@ export default defineConfig({
     plugins: [
         vue(),
         Components({
-            dts:false,
+            dts: false,
             resolvers: [AntDesignVueResolver()],
         }),
     ],
     server: {
         port: 3000,
         host: true,
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3001',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, ''),
+            },
+        },
     },
     envDir: path.resolve(__dirname, './src/environment/'),
     resolve: {
