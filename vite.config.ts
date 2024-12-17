@@ -6,6 +6,7 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: '/home/',
     plugins: [
         vue(),
         Components({
@@ -15,7 +16,7 @@ export default defineConfig({
     ],
     server: {
         port: 3000,
-        host: true,
+        cors: true,
         proxy: {
             '/api': {
                 target: 'http://localhost:3001',

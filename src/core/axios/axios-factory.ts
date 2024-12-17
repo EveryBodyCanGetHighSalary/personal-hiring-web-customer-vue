@@ -4,6 +4,7 @@ import axios, {
     AxiosResponse,
     InternalAxiosRequestConfig,
 } from 'axios';
+import { APIErrorEntity, ErrorType } from './types/api.types';
 
 export const useAxios = (endPoint?: string, timeout = 30000) => {
     const instance = axios.create({
@@ -34,14 +35,18 @@ const responseInterceptors = (response: AxiosResponse) => {
 };
 
 const responseErrorHandler = (e: AxiosError) => {
-    const errorCode = e?.status;
+    const apiError = e?.response?.data as APIErrorEntity;
+    const errorCode = apiError.code;
     switch (errorCode) {
         case 400:
-            console.log(e.response?.data);
+            apiError.errorType = ErrorType.VALIDATE_ERROR;
+            break;
+        case 401:
+            apiError.errorType = ErrorType.AUTH_ERROR;
             break;
         case 500:
-        default:
+            apiError.errorType = ErrorType.SERVER_ERROR;
             break;
     }
-    return Promise.reject(e);
+    return Promise.reject(apiError);
 };

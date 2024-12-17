@@ -1,3 +1,7 @@
+import {
+    globalErrorHandler,
+    initNativeErrorHandler,
+} from '@/core/axios/error-handler.composition';
 import { routes } from '@/core/routes/routes';
 import { createPinia } from 'pinia';
 import { App } from 'vue';
@@ -10,8 +14,13 @@ export const injectPinia = (app: App<Element>): void => {
 
 export const injectRouter = (app: App<Element>): void => {
     const router = createRouter({
-        history: createWebHistory(),
+        history: createWebHistory('/home/'),
         routes,
     });
     app.use(router);
+};
+
+export const injectErrorHandler = (app: App<Element>): void => {
+    app.config.errorHandler = globalErrorHandler;
+    initNativeErrorHandler();
 };

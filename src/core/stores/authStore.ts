@@ -5,6 +5,7 @@ export type AuthInfo = {
     userName: string | null;
     token: string | undefined;
     roleType: 'customer' | 'admin' | 'company' | null;
+    isLogin: boolean;
 };
 
 export const useAuthStore = defineStore({
@@ -14,6 +15,7 @@ export const useAuthStore = defineStore({
             userName: null,
             token: undefined,
             roleType: null,
+            isLogin: false,
         };
     },
     getters: {
@@ -23,8 +25,7 @@ export const useAuthStore = defineStore({
     },
     actions: {
         async requestAuth() {
-            const result = await requestAuth('customer@qq.com', 'customer123');
-            console.log(result);
+            await requestAuth('customer1@qq.com', 'customer123');
         },
     },
 });
